@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var ArticleSchema = new Schema ({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     summary: {
         type: String,
@@ -19,6 +20,10 @@ var ArticleSchema = new Schema ({
         type: String,
         required: false
     },
+    updated: {
+        type: String,
+        required: true
+    },
 
     note: {
         type: Schema.Types.ObjectId,
@@ -26,6 +31,6 @@ var ArticleSchema = new Schema ({
     }
 });
 
-var Article = mongoose.model("Article",ArticleSchema);
+var Article = mongoose.model("Article", ArticleSchema);
 
 module.exports = Article;

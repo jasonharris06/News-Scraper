@@ -29,13 +29,15 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 //Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser: true });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraper";
 
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 //Routes
 
 //A GET route for scraping the KSL Website
 app.get("/scrape", function (req, res) {
     let url = "http://www.ksl.com";
+    
     axios.get(url).then(response => {
         var $ = cheerio.load(response.data);
 
@@ -43,59 +45,73 @@ app.get("/scrape", function (req, res) {
             //save results in empty object
             var results = {};
 
-            results.title = $(this).find("h2").text();
-            results.summary = $(this).find("h5").text();
+            results.title = $(this).find("h2").text().trim();
+            results.summary = $(this).find("h5").text().trim();
             results.link = (url + $(this).find("a").attr("href"));
-            results.photo = $(this).find("a").find("img").attr("data-srcset");
+            results.photo = $(this).find("a").find("img").attr("data-srcset").trim();
+            results.updated = $(this).find("h4").text();
 
-            //console.log(results);
+            console.log(results.photo);
 
             db.Article.create(results)
-                .then(dbArticle => {
-                    console.log(dbArticle);
+                .then(function(dbArticle){
+                    //console.log(dbArticle);
                 })
-                .catch(err => {
-                    console.log(err);
+                .catch(function(err) {
+                    //console.log(err);
                 });
         });
+        
 
         res.send("scrapy scrape scrape")
     });
 });
 
-app.get("/articles", (res, req)=>{
+// Route for getting all Articles from the db
+app.get("/articles", function(req, res) {
+    // Grab every document in the Articles collection
     db.Article.find({})
-    .then(dbArticle => {
+      .then(function(dbArticle) {
+        // If we were able to successfully find Articles, send them back to the client
         res.json(dbArticle);
-    })
-    .catch(err => {
+      })
+      .catch(function(err) {
+        // If an error occurred, send it to the client
         res.json(err);
-    });
-});
+      });
+  });
 
 app.get("/articles/:id", (req, res) => {
     db.Article.findOne({ _id: req.params.id })
     .populate("note")
-    .then( dbArticle =>{
+    .then(function(dbArticle){
         res.json(dbArticle);
     })
-    .catch(err =>{
+    .catch(function(err){
         res.json(err);
-    })
+    });
 });
 
 app.post("/articles/:id", (req, res) =>{
     db.Note.create(req.body)
-    .then(dbNote => {
+    .then(function(dbNote){
         return db.Article.findByIdAndUpdate({ _id: req.params.id}, { note:dbNote._id }, {new: true});
     })
-    .then(dbArticle =>{
+    .then(function(dbArticle){
         res.json(dbArticle);
     })
-    .catch(err =>{
+    .catch(function(err){
         res.json(err);
     });
 });
+
+app.get("/", function(req, res){
+    db.Article.find({}).then(function(data){
+        //console.log(data)
+        res.render("index", {items : data})
+    })
+   
+})
 // Start the server
 app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
