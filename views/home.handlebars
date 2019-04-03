@@ -4,7 +4,7 @@
     <hr class="my-2">
     <p>KSL Scraper</p>
     <p class="lead">
-        <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Jumbo action name</a>
+        <a class="btn btn-primary btn-lg" id="scrape" role="button">Scrape KSL</a>
     </p>
 </div>
 
@@ -24,9 +24,13 @@
     {{/each}}
     </div>
 </div> --}}
+<div class=articles>
 
+</div>
 <div class="container">
         {{#each items}}
+          {{#unless delete}}
+    
     <div class="row">
         
         <div class="card w-100" style="max-width: 100%;">
@@ -40,13 +44,16 @@
                         <span class="card-text">{{summary}}</span>
                         <p class="card-text"><small class="text-muted">{{updated}}</small></p>
                         <a href={{link}} target="_blank" class="btn btn-primary">View Article</a>
-                        <a href={{link}} target="_blank" class="btn btn-primary">Save Article</a>
+                        <button href="/delete/:id" target="_blank" class="btn btn-primary delete" data-id={{_id}} >Delete</button>
+                        <button class="btn btn-primary save-article" data-id={{_id}} >Save</button>
                     </div>
                 </div>
             </div>
         </div>
        
     </div>
+
+            {{/unless}}
         {{/each}}
 </div>
     

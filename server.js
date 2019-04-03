@@ -51,21 +51,32 @@ app.get("/scrape", function (req, res) {
             results.photo = $(this).find("a").find("img").attr("data-srcset").trim();
             results.updated = $(this).find("h4").text();
 
-            console.log(results.photo);
+            //console.log(results.photo);
 
             db.Article.create(results)
                 .then(function(dbArticle){
-                    //console.log(dbArticle);
+                    //document.location.href="home"
+                    //res.render("home", {items : data})
+                    console.log(dbArticle);
+                    // db.Article.find({}).then(function(data){
+                    //     //console.log(data)
+                    //     res.render("home", {items : data})
+                    })
                 })
                 .catch(function(err) {
-                    //console.log(err);
+                    console.log(err);
                 });
         });
         
-
+        //res.render("home", {items : data})
+        //document.location.href="/";
+        //location.reload();
         res.send("scrapy scrape scrape")
     });
-});
+    // db.Article.find({}).then(function(data){
+    //     //console.log(data)
+    //     res.render("home", {items : data})
+
 
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
@@ -74,6 +85,7 @@ app.get("/articles", function(req, res) {
       .then(function(dbArticle) {
         // If we were able to successfully find Articles, send them back to the client
         res.json(dbArticle);
+        
       })
       .catch(function(err) {
         // If an error occurred, send it to the client
@@ -82,20 +94,33 @@ app.get("/articles", function(req, res) {
   });
 
 app.get("/articles/:id", (req, res) => {
+    res.render("notes", {items : data}),
     db.Article.findOne({ _id: req.params.id })
     .populate("note")
     .then(function(dbArticle){
-        res.json(dbArticle);
+        res.json(dbArticle) ,
+        res.render("notes", {items : data})
     })
     .catch(function(err){
         res.json(err);
     });
+    res.render("notes", {items : data})
 });
+
+app.put("/delete/:id", (req, res) => {
+    db.Article.findByIdAndUpdate({ _id: req.params.id}, {delete: true}, (err, succeess) => {
+        if (err) console.error(err);
+        res.send('success')
+    })
+
+
+})
 
 app.post("/articles/:id", (req, res) =>{
     db.Note.create(req.body)
     .then(function(dbNote){
         return db.Article.findByIdAndUpdate({ _id: req.params.id}, { note:dbNote._id }, {new: true});
+        
     })
     .then(function(dbArticle){
         res.json(dbArticle);
@@ -106,9 +131,19 @@ app.post("/articles/:id", (req, res) =>{
 });
 
 app.get("/", function(req, res){
+
     db.Article.find({}).then(function(data){
         //console.log(data)
-        res.render("index", {items : data})
+        res.render("home", {items : data})
+    })
+   
+})
+
+app.get("/saved", function(req, res){
+
+    db.Article.find({}).then(function(data){
+        //console.log(data)
+        res.render("saved", {items : data})
     })
    
 })
