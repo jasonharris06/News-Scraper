@@ -1,14 +1,14 @@
 <div class="jumbotron">
-  <h1 class="display-3">Jumbo heading</h1>
-  <p class="lead">Jumbo helper text</p>
+  <h1 class="display-3">KSL NEWS SCRAPPER</h1>
+
   <hr class="my-2">
-  <p>KSL Scraper</p>
   <p class="lead">
     <a class="btn btn-primary btn-lg" id="scrape" role="button">Scrape KSL</a>
+    <a class="btn btn-primary btn-lg" id="home" role="button" href="/">Home</a>
   </p>
 </div>
 
-<h2>Current KSL articles</h2>
+<h2 style="text-align: center">Current KSL articles</h2>
 {{!-- <div class="container">
     <div class="row">
         {{#each items}}
@@ -44,9 +44,12 @@
             <span class="card-text">{{summary}}</span>
             <p class="card-text"><small class="text-muted">{{updated}}</small></p>
             <a href={{link}} target="_blank" class="btn btn-primary">View Article</a>
-            {{!-- <button href="/delete/:id" target="_blank" class="btn btn-primary delete" data-id={{_id}} >Delete</button> --}}
-            <button class="btn btn-primary note" data-id={{_id}} data-title="{{title}}" data-toggle="modal"
+            <button class="btn btn-primary note" data-id={{_id}} data-title="{{title}}" data-toggle="modal" 
               data-target="#exampleModal">Add Note</button>
+            {{#each added}}
+            <button href="/delete/:id" target="_blank" class="btn btn-primary delete" data-id={{_id}}>Hello</button>
+            {{/each}}
+            
           </div>
         </div>
       </div>
@@ -71,17 +74,17 @@
   <div class="modal-dialog" data-id={{_id}} role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"  data-title="{{title}}" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" data-title="{{title}}" id="exampleModalLabel">Modal title</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form>
-        <div class="form-group">
-          <label for="Note-Area">Article Notes</label>
-          <textarea class="form-control" id="Note-Area" rows="3"></textarea>
-        </div>
+          <div class="form-group">
+            <label for="Note-Area">Article Notes</label>
+            <textarea class="form-control" id="Note-Area" rows="3"></textarea>
+          </div>
         </form>
       </div>
       <div class="modal-footer">

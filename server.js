@@ -102,6 +102,7 @@ app.get("/articles/:id", (req, res) => {
         res.render("notes", {items : data})
     })
     .catch(function(err){
+        console.log(err);
         res.json(err);
     });
     res.render("notes", {items : data})
@@ -117,7 +118,8 @@ app.put("/delete/:id", (req, res) => {
 })
 
 app.post("/articles/:id", (req, res) =>{
-    db.Note.create(req.body)
+   console.log(`\n\n\n${JSON.stringify(req.body)}\n\n\n`);
+    db.Notes.create(req.body)
     .then(function(dbNote){
         return db.Article.findByIdAndUpdate({ _id: req.params.id}, { note:dbNote._id }, {new: true});
         

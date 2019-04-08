@@ -102,13 +102,17 @@ $(document).on("click", ".saved-article", function() {
           // Value taken from title input
           title: title,
           // Value taken from note textarea
-          body: $("#Note-Area").val()
+          body: $("#Note-Area").val(),
+
+          added: true
+
          
         }
       })
         // With that done
         .then(function (data) {
           // Log the response
+       
           console.log("apps.js ln 90", data);
           // Empty the notes section
   

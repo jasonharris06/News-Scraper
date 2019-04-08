@@ -1,10 +1,10 @@
 <div class="jumbotron">
-    <h1 class="display-3">Jumbo heading</h1>
-    <p class="lead">Jumbo helper text</p>
+    <h1 class="display-3">KSL NEWS Scrapper</h1>
+   
     <hr class="my-2">
-    <p>KSL Scraper</p>
     <p class="lead">
         <a class="btn btn-primary btn-lg" id="scrape" role="button">Scrape KSL</a>
+        <a class="btn btn-primary btn-lg" id="Saved-link" role="button" href="saved">Saved Articles</a>
     </p>
 </div>
 
@@ -45,6 +45,9 @@
                         <p class="card-text"><small class="text-muted">{{updated}}</small></p>
                         <a href={{link}} target="_blank" class="btn btn-primary">View Article</a>
                         <button href="/delete/:id" target="_blank" class="btn btn-primary delete" data-id={{_id}} >Delete</button>
+                        {{#each Note.body}}
+                             <button href="/delete/:id" target="_blank" class="btn btn-primary delete" data-id={{_id}} >Delete</button>
+                        {{/each}}
                         <button class="btn btn-primary save-article" data-id={{_id}} >Save</button>
                     </div>
                 </div>
