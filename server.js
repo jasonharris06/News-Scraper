@@ -2,13 +2,13 @@ var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
-//Scraping tools
+//Scraping toolshro
 var axios = require("axios");
 const cheerio = require('cheerio');
 
 //require all models
 var db = require("./models");
-var PORT = 8080;
+var PORT = process.env.PORT || 8080;
 
 var app = express();
 
